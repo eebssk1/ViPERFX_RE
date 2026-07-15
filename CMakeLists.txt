@@ -24,7 +24,7 @@ add_compile_options("SHELL:-mllvm --enable-knowledge-retention")
 add_compile_options("SHELL:-mllvm --extra-vectorizer-passes=true")
 add_compile_options("-funsafe-math-optimizations")
 add_compile_options("SHELL:-mllvm --hot-cold-split")
-add_link_options("-Wl,-O3,--relax,--lto-O3")
+add_link_options("-Wl,-O3,--relax,--lto-O3,-S")
 endif()
 
 add_subdirectory(ViPERDSP)
