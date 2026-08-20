@@ -16,6 +16,8 @@ set(EXTRA_LLVM_FLAGS
 "-mllvm --polly-invariant-load-hoisting"
 "-mllvm --polly-run-dce"
 "-mllvm --polly-vectorizer=stripmine"
+"-mllvm --polly-default-tile-size=24"
+"-mllvm --polly-register-tiling"
 "-mllvm --enable-loopinterchange"
 "-mllvm --enable-partial-inlining"
 "-mllvm --disable-mr-partial-inlining"
@@ -37,6 +39,8 @@ foreach(FLAG IN LISTS EXTRA_LLVM_FLAGS)
     string(REPLACE " " "," LINKER_FLAG "${FLAG}")
     add_link_options("-Wl,${LINKER_FLAG}")
 endforeach()
+add_compile_options("SHELL:-mllvm --polly-register-tile-sizes=4,4,1")
+add_link_options("SHELL:-Xlinker -mllvm -Xlinker --polly-register-tile-sizes=4,4,1")
 
 add_link_options("-Wl,-O3,--relax,--lto-O3,--icf=safe")
 endif()
@@ -45,7 +49,16 @@ endif()
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 add_compile_options("-funsafe-math-optimizations")
+add_compile_options("-fno-math-errno")
 add_link_options("-funsafe-math-optimizations")
+add_link_options("-fno-math-errno")
+
+#baseline opt
+add_compile_options("-march=armv8.2-a+dotprod")
+add_compile_options("-mtune=cortex-a710")
+
+add_link_options("-march=armv8.2-a+dotprod")
+add_link_options("-mtune=cortex-a710")
 
 set(V4A_RE_COMMON_FLAGS
     -ffunction-sections
