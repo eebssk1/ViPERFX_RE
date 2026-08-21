@@ -53,7 +53,7 @@ $(ABIS):
 		-DVERSION_CODE=$(VERSION_CODE) \
 		-DVERSION_NAME=$(VERSION_NAME) \
 		.
-	cmake --build $(BUILD_DIR)/$@ -- -j$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+	cmake --build $(BUILD_DIR)/$@ --verbose --  -j$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 	@mkdir -p $(OUT_DIR)
 	cp $(BUILD_DIR)/$@/libv4a_re.so $(OUT_DIR)/libv4a_re_$@.so
 
